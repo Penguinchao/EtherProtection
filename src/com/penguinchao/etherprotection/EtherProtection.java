@@ -79,6 +79,7 @@ public class EtherProtection extends JavaPlugin {
 				return false;
 			}else if(!ProtectionManager.isProtectedType(block)){
 				sender.sendMessage(ChatColor.RED+"That type of block cannot have protection");
+				return false;
 			}
 			UUID owner = ProtectionManager.getBlockOwner(block);
 			boolean uuidWasNull = false;

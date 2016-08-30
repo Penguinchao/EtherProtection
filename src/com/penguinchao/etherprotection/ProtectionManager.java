@@ -457,7 +457,7 @@ public class ProtectionManager {
 	}
 	public static void removeVisitor(Block block, UUID player){
 		EtherProtection.debugTrace("[removeVisitor] Begin");
-		String query = "DELETE FROM `"+main.getConfig().getString("mysqlPrefix")+"savedprotections` WHERE `player_uuid` = '"+player.toString()+"' AND `protectiontype` = 'visitor' AND `x` = '"+block.getX()+"' AND `y` = '"+block.getY()+"' AND `z` = '"+block.getZ()+"' AND `world` = '"+block.getWorld().toString()+"';";
+		String query = "DELETE FROM `"+main.getConfig().getString("mysqlPrefix")+"savedprotections` WHERE `player_uuid` = '"+player.toString()+"' AND `protectiontype` = 'visitor' AND `x` = '"+block.getX()+"' AND `y` = '"+block.getY()+"' AND `z` = '"+block.getZ()+"' AND `world` = '"+block.getWorld().getName()+"';";
 		try {
 			PreparedStatement sql = connection.prepareStatement(query);
 			sql.executeUpdate();
