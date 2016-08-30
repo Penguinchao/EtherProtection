@@ -157,6 +157,7 @@ public class EtherProtection extends JavaPlugin {
 				return false;
 			}else if(!ProtectionManager.isProtectedType(block)){
 				sender.sendMessage(ChatColor.RED+"That type of block cannot have protection");
+				return false;
 			}
 			UUID owner = ProtectionManager.getBlockOwner(block);
 			boolean isBypassing = false;
@@ -317,14 +318,14 @@ public class EtherProtection extends JavaPlugin {
 			if(player.hasPermission("etherprotection.admin.purge")){
 				sender.sendMessage(ChatColor.YELLOW+"/cpurge <name>"+ChatColor.GREEN+" Delete all protections belonging to someone");
 			}
-			sender.sendMessage(ChatColor.GREEN+"Change the protection type of the block you are looking at:");
+			sender.sendMessage(ChatColor.DARK_GREEN+"Change the protection type of the block you are looking at:");
 			if(player.hasPermission("etherprotection.mode.public")){
-				sender.sendMessage(ChatColor.YELLOW+"- /cmodify public"+ChatColor.GREEN+" Make the block usable, but unbreakable to others");
+				sender.sendMessage(ChatColor.DARK_GREEN+"- "+ChatColor.YELLOW+"/cmodify public"+ChatColor.GREEN+" Make the block usable, but unbreakable to others");
 			}
 			if(player.hasPermission("etherprotection.mode.private")){
-				sender.sendMessage(ChatColor.YELLOW+"- /cmodify private"+ChatColor.GREEN+" Make the block unusable and unbreakable to others");
+				sender.sendMessage(ChatColor.DARK_GREEN+"- "+ChatColor.YELLOW+"/cmodify private"+ChatColor.GREEN+" Make the block unusable and unbreakable to others");
 			}
-			sender.sendMessage(ChatColor.YELLOW+"- /cmodify none"+ChatColor.GREEN+" Remove all protection from the block");
+			sender.sendMessage(ChatColor.DARK_GREEN+"- "+ChatColor.YELLOW+"/cmodify none"+ChatColor.GREEN+" Remove all protection from the block");
 			if(player.hasPermission("etherprotection.mode.public")){
 				sender.sendMessage(ChatColor.YELLOW+"/cpublic"+ChatColor.GREEN+" Future blocks you place will be usable, but unbreakable to others");
 			}
@@ -332,9 +333,9 @@ public class EtherProtection extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW+"/cprivate"+ChatColor.GREEN+" Future blocks you place will be unusable and unbreakable to others");
 			}
 			sender.sendMessage(ChatColor.YELLOW+"/cnone"+ChatColor.GREEN+" Future blocks you place will not be automatically protected");
-			sender.sendMessage(ChatColor.GREEN+"Add or remove visitors who can access the block that you are looking at");
-			sender.sendMessage(ChatColor.YELLOW+"- /cvisitor add <name>"+ChatColor.GREEN+" allow the player to use the block");
-			sender.sendMessage(ChatColor.YELLOW+"- /cvisitor remove <name>"+ChatColor.GREEN+" remove the ability for a player to use the block");
+			sender.sendMessage(ChatColor.DARK_GREEN+"Add or remove visitors who can access the block that you are looking at");
+			sender.sendMessage(ChatColor.DARK_GREEN+"- "+ChatColor.YELLOW+"/cvisitor add <name>"+ChatColor.GREEN+" allow the player to use the block");
+			sender.sendMessage(ChatColor.DARK_GREEN+"- "+ChatColor.YELLOW+"/cvisitor remove <name>"+ChatColor.GREEN+" remove the ability for a player to use the block");
 			//if(player.hasPermission("etherprotection.admin.inspect")){
 			sender.sendMessage(ChatColor.YELLOW+"/cinspect <name>"+ChatColor.GREEN+" View the protection information for the block you are looking at");
 			//}
