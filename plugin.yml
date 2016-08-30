@@ -1,0 +1,45 @@
+main: com.penguinchao.etherprotection.EtherProtection
+version: 1.0
+name: EtherProtection
+author: Penguinchao
+commands:
+    cprivate:
+        description: Change your placement mode to private. (Players cannot interact or break)
+    cpublic:
+        description: Change your placement mode to public. (Players can interact, but they cannot break)
+    cnone:
+        description: Unset your placement mode. (Blocks you place will have no protection)
+    cmodify:
+        description: Change the protection of an already-placed block. /cmodify <public>/<private>/<none>
+    cvisitor:
+        description: Add or remove a visitor to the block you are looking at. /cvisitor <add>/<remove> <name>
+    cinspect:
+        description: View the owner and protection type of block
+    cpurge:
+        description: Remove all protections on blocks that belong to a certain player.
+    csetowner:
+        description: Set the owner for the block you are looking at.
+    chelp:
+        description: Show help page for EtherProtection
+permissions:
+    etherprotection.mode.private:
+        default: true
+        description: Allows the use of /cprivate and /cmodify private
+    etherprotection.mode.public:
+        default: true
+        description: Allows the use of /cpublic and /cmodify public
+    etherprotection.admin.inspect:
+        description: Show additional details on /cinspect
+        default: op
+    etherprotection.admin.bypass:
+        default: op
+        description: Allows the breaking of protected blocks and use of protected blocks
+    etherprotection.admin.purge:
+        default: op
+        description: Allows the use of /cpurge
+    etherprotection.admin.setowner:
+        default: op
+        description: Allows the use of /csetowner
+    etherprotection.admin.modify:
+        default: op
+        description: Allows the use of /cmodify on someone else's block

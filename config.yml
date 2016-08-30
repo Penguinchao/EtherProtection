@@ -1,0 +1,41 @@
+#Debug Trace
+debug-enabled: false
+#Database
+mysqlHostName: localhost
+mysqlPort: 3306
+mysqlUsername: root
+mysqlPassword: ''
+mysqlDatabase: etherprotections
+mysqlPrefix: protections_
+#--Protections--
+#Note: Specified IDs will have priority over string lists, and blacklists will have priority over whitelists
+#Should all non-blacklisted blocks be allowed to be protected?
+only-blacklist: false
+#Blocks that should always check for protection above and below (other half of door) - Untested
+doorblocks:
+ - 64
+ - 71
+ - 193
+ - 194
+ - 195
+ - 196
+ - 197
+#Unless blacklisted, blocks with this string in their name will be protected
+whitelist-strings:
+ - CHEST
+#Block IDs that can ALWAYS be protected
+whitelist-id:
+ - 154
+ - 130
+ - 146
+#Unless whitelisted by ID, blocks with this string will not be protected
+blacklist-strings:
+ - stone_slab
+ - cobblestone
+#Block IDs that will NEVER be protected -- has priority over whitelist-id
+blacklist-id:
+ - 1
+ - 4
+ - 24
+ - 43
+ - 44
