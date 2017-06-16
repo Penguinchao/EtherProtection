@@ -1,10 +1,12 @@
 package com.penguinchao.etherprotection;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -73,7 +75,7 @@ public class EtherProtection extends JavaPlugin {
 				return false;
 			}
 			Player player = (Player) sender;
-			Block block = player.getTargetBlock(null, 6);
+			Block block = player.getTargetBlock((Set<Material>) null, 6);
 			if(block == null){
 				player.sendMessage(ChatColor.RED+"Please look at a block to be protected");
 				return false;
@@ -152,7 +154,7 @@ public class EtherProtection extends JavaPlugin {
 				sender.sendMessage(ChatColor.YELLOW+"/cvisitor remove <name>"+ChatColor.GREEN+" remove the ability for a player to use the block");
 			}
 			Player player = (Player) sender;
-			Block block = player.getTargetBlock(null, 6);
+			Block block = player.getTargetBlock((Set<Material>) null, 6);
 			if(block == null){
 				player.sendMessage(ChatColor.RED+"Please look at a block to be protected");
 				return false;
@@ -202,7 +204,7 @@ public class EtherProtection extends JavaPlugin {
 				return false;
 			}
 			Player player = (Player) sender;
-			Block block = player.getTargetBlock(null, 6);
+			Block block = player.getTargetBlock((Set<Material>) null, 6);
 			if(block == null){
 				//player.sendMessage(ChatColor.RED+"Please look at a protected block");
 				sender.sendMessage(ChatColor.GREEN+"This block has no owner");
@@ -286,7 +288,7 @@ public class EtherProtection extends JavaPlugin {
 				player.sendMessage(ChatColor.YELLOW+"/csetowner <name>"+ChatColor.GREEN+" Remove all ownership of the block you are looking at, then replace it with the specified player");
 				return false;
 			}
-			Block block = player.getTargetBlock(null, 6);
+			Block block = player.getTargetBlock((Set<Material>) null, 6);
 			if(block == null){
 				player.sendMessage(ChatColor.RED+"Please look at a protected block");
 				return false;
