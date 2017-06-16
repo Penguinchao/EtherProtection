@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -19,12 +21,13 @@ import org.bukkit.block.Block;
 public class ProtectionManager {
 	private static EtherProtection main;
 	private static Connection connection;
-	
+	private static boolean couldConnect;
+        
 	public static void EstablishConnection(EtherProtection passedMain){
 		EtherProtection.debugTrace("[EstablishConnection] Begin");
 		main = passedMain;
 		String mysqlHostName= main.getConfig().getString("mysqlHostName");
-		String mysqlPort	= main.getConfig().getString("mysqlPort");
+		String mysqlPort    = main.getConfig().getString("mysqlPort");
 		String mysqlUsername= main.getConfig().getString("mysqlUsername");
 		String mysqlPassword= main.getConfig().getString("mysqlPassword");
 		String mysqlDatabase= main.getConfig().getString("mysqlDatabase");
@@ -32,10 +35,12 @@ public class ProtectionManager {
 		main.getLogger().info("Connecting to Database");
 		try{
 			connection = DriverManager.getConnection(dburl, mysqlUsername, mysqlPassword);
+                        couldConnect = true;
 			checkTables();
 		}catch(Exception exception){
 			main.getLogger().info("[ERROR] Could not connect to the database -- disabling EtherProtection");
 			exception.printStackTrace();
+                        couldConnect = false;
 			Bukkit.getPluginManager().disablePlugin(main);
 		}
 		EtherProtection.debugTrace("[EstablishConnection] Done");
@@ -47,6 +52,19 @@ public class ProtectionManager {
 		sql.executeUpdate();
 		EtherProtection.debugTrace("[checkTables] Done");
 	}
+        private static void checkConnection(){
+            if(!couldConnect){
+                return;
+            }
+            try {
+                if(connection.isClosed()){
+                    main.getLogger().info("Database connection was closed. Connecting again.");
+                    EstablishConnection(main);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ProtectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 	public static boolean isEnabled(){
 		EtherProtection.debugTrace("[isEnabled] Begin");
 		//Used by other plugins to check if plugin is enabled
@@ -70,6 +88,7 @@ public class ProtectionManager {
 		}else{
 			EtherProtection.debugTrace("[getBlockOwner] Begin Second");
 		}
+                checkConnection();
 		if(block == null){
 			EtherProtection.debugTrace("[getBlockOwner] Done - Null");
 			return null;
@@ -102,6 +121,7 @@ public class ProtectionManager {
 	}
 	public static boolean setOwnership(Block block, UUID player, boolean isPublic){
 		EtherProtection.debugTrace("[setOwnership] Begin");
+                checkConnection();
 		if(block == null){
 			return false;
 		}
@@ -137,6 +157,7 @@ public class ProtectionManager {
 		}else{
 			EtherProtection.debugTrace("[deleteOwnership] Begin Second");
 		}
+                checkConnection();
 		if(block == null){
 			return;
 		}
@@ -217,6 +238,7 @@ public class ProtectionManager {
 	}
 	public static boolean purgePlayer(UUID player){
 		EtherProtection.debugTrace("[purgePlayer] Begin");
+                checkConnection();
 		if(player == null){
 			EtherProtection.debugTrace("[purgePlayer] UUID is null");
 			EtherProtection.debugTrace("[purgePlayer] Done");
@@ -249,6 +271,7 @@ public class ProtectionManager {
 	}
 	public static List<Block> getAllOwnedBlocks(UUID player){
 		EtherProtection.debugTrace("[getAllOwnedBlocks] Begin");
+                checkConnection();
 		if(player == null){
 			EtherProtection.debugTrace("[getAllOwnedBlocks] UUID is Null");
 			EtherProtection.debugTrace("[getAllOwnedBlocks] Done - Null");
@@ -403,6 +426,7 @@ public class ProtectionManager {
 	}
 	public static boolean isPublic(Block block){
 		EtherProtection.debugTrace("[isPublic] Begin");
+                checkConnection();
 		//Returns true if the protected block is allowed to be interacted with
 		String query = "SELECT * FROM `"+main.getConfig().getString("mysqlPrefix")+"savedprotections` WHERE `protectiontype` = 'public' AND `x` = '"+block.getX()+"' AND `y` = '"+block.getY()+"' AND `z` = '"+block.getZ()+"' AND `world` = '"+block.getWorld().getName()+"' ";
 		try {
@@ -426,6 +450,7 @@ public class ProtectionManager {
 	}
 	public static List<UUID> getVisitors(Block block){
 		//Returns a list of players who are allowed to interact with private block
+                checkConnection();
 		String query = "SELECT `player_uuid` FROM `"+main.getConfig().getString("mysqlPrefix")+"savedprotections` WHERE `protectiontype` = 'visitor' AND `x` = '"+block.getX()+"' AND `y` = '"+block.getY()+"' AND `z` = '"+block.getZ()+"' AND `world` = '"+block.getWorld().getName()+"'; ";
 		try {
 			PreparedStatement sql = connection.prepareStatement(query);
@@ -446,6 +471,7 @@ public class ProtectionManager {
 	}
 	public static void addVisitor(Block block, UUID player){
 		EtherProtection.debugTrace("[addVisitor] Begin");
+                checkConnection();
 		String query = "INSERT INTO `"+main.getConfig().getString("mysqlPrefix")+"savedprotections` (`player_uuid`, `protectiontype`, `x`, `y`, `z`, `world`) VALUES ('"+player.toString()+"', 'visitor', '"+block.getX()+"', '"+block.getY()+"', '"+block.getZ()+"', '"+block.getWorld().getName()+"');";
 		try {
 			PreparedStatement sql = connection.prepareStatement(query);
@@ -457,6 +483,7 @@ public class ProtectionManager {
 	}
 	public static void removeVisitor(Block block, UUID player){
 		EtherProtection.debugTrace("[removeVisitor] Begin");
+                checkConnection();
 		String query = "DELETE FROM `"+main.getConfig().getString("mysqlPrefix")+"savedprotections` WHERE `player_uuid` = '"+player.toString()+"' AND `protectiontype` = 'visitor' AND `x` = '"+block.getX()+"' AND `y` = '"+block.getY()+"' AND `z` = '"+block.getZ()+"' AND `world` = '"+block.getWorld().getName()+"';";
 		try {
 			PreparedStatement sql = connection.prepareStatement(query);
